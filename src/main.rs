@@ -3,17 +3,20 @@ extern crate diesel;
 #[macro_use]
 extern crate rocket;
 
+mod app;
+mod cors;
+mod crud;
 mod models;
 mod schema;
-mod app;
-mod crud; 
 
 use crate::crud::shared::Db;
+use cors::CORS;
 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
         .attach(Db::fairing())
+        .attach(CORS)
         .attach(crud::read::stage())
         .attach(crud::create::stage())
         .attach(crud::delete::stage())
